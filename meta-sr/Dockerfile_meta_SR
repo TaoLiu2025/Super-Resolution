@@ -1,0 +1,31 @@
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
+
+ENV http_proxy="http://172.24.209.222:2222"
+ENV https_proxy="http://172.24.209.222:2222"
+RUN export http_proxy=$http_proxy
+RUN export https_proxy=$https_proxy
+
+ARG USERNAME='usw00078'
+ARG UID=1400078
+ARG GID=10000
+
+RUN groupadd -g $GID debuggroup 
+RUN useradd -u $UID -g $GID -G sudo $USERNAME
+RUN echo $USERNAME:test| chpasswd
+
+
+RUN apt-get update && apt-get install -y \
+	python3-opencv \
+	python3-dev \
+	libopencv-dev \
+	liblapack-dev \
+	vim \
+	wget \
+	unzip \
+	sudo \
+	python3-pip 
+USER $USERNAME
